@@ -1,6 +1,7 @@
 package defaultPackage;
 
 import javafx.application.Platform;
+import org.apache.batik.transcoder.*;
 
 import java.io.*;
 
