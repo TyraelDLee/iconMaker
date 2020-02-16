@@ -1,14 +1,18 @@
 package defaultPackage;
 
 import javafx.application.Platform;
+
 import org.apache.batik.transcoder.*;
+import org.apache.batik.transcoder.image.PNGTranscoder;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 public class Execution {
     private final static String packageIcon = "iconutil -c icns ";
     private final static String extractIcon = "iconutil -c iconset ";
     private Observer observer;
+    private final static int[] sizes = {16,32,128,256,512};
 
     /**
      * main execute method,
@@ -162,6 +166,10 @@ public class Execution {
             executeApp(address);
             return true;
         }
+        else if(endWith(address).equals(".svg")){
+            executeSVG(address);
+            return true;
+        }
         else return false;
     }
 
@@ -221,13 +229,68 @@ public class Execution {
         observer.update(message);
     }
 
+    private void executeSVG(String address){
+        String fileEncode = encode(address);
+        String fileRoot = address.replace(fileName(address),"");
+        String file = fileRoot+"icon.iconset";
+        File gen;
+        for (int i = 0; i < 255; i++) {
+            if(i==0) file = fileRoot+"icon.iconset";
+            else file = fileRoot+"icon"+i+".iconset";
+            if(!new File(file).exists()) {
+                gen = new File(file);
+                gen.mkdir();
+                break;
+            }
+        }
+        //gen folder.
+
+        System.out.println(file);
+        for(int size : sizes){
+            svgTopng(size, false, encode(address), file+"/icon_");
+            svgTopng(size,true, encode(address), file+"/icon_");
+        }
+        System.out.println("svg convert finish!");
+        execute(file,true);
+    }
+
+    private void svgTopng(int size, boolean x2, String svg, String outputSRC){
+        File img = new File(outputSRC+size+"x"+size+(x2?"@x2":"")+".png");
+        try {
+            FileOutputStream writer = new FileOutputStream(img);
+            byte[] SVGcontents = svg.getBytes(StandardCharsets.UTF_8);
+            PNGTranscoder pngTranscoder = new PNGTranscoder();
+            pngTranscoder.addTranscodingHint(PNGTranscoder.KEY_HEIGHT, (float)(x2?size*2:size));
+            //pngTranscoder.addTranscodingHint(PNGTranscoder.KEY_WIDTH, size);
+            TranscoderInput input = new TranscoderInput(new ByteArrayInputStream(SVGcontents));
+            TranscoderOutput output = new TranscoderOutput(writer);
+            pngTranscoder.transcode(input, output);
+            writer.flush();
+        } catch (TranscoderException | IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private String encode(String src){
+        String content = "";
+        try {
+            InputStream in = new FileInputStream(src);
+            byte[] data = new byte[in.available()];
+            content = new String(data,0,in.read(data));
+            in.read(data);
+            in.close();
+        } catch (IOException e) { e.printStackTrace(); }
+        return content;
+    }
+
     /**
      * TEST METHOD, DO NOT RUN THIS DIRECTLY!
      * */
     public static void main(String[] args) {
         Execution execution = new Execution();
-        execution.executeApp("/Users/tyraellee/Desktop/i4Tools.app");
-
+        //execution.executeApp("/Users/tyraellee/Desktop/i4Tools.app");
+        execution.executeSVG("/Users/tyraellee/Desktop/test.svg");
     }
 }
 //todo: recognize vector image and package to .icns file
