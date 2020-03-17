@@ -221,14 +221,6 @@ public class Execution {
         }
     }
 
-    public void reg(Observer observer){
-        this.observer = observer;
-    }
-
-    public void upd(String message){
-        observer.update(message);
-    }
-
     private void executeSVG(String address){
         String fileEncode = encode(address);
         String fileRoot = address.replace(fileName(address),"");
@@ -282,6 +274,14 @@ public class Execution {
             in.close();
         } catch (IOException e) { e.printStackTrace(); }
         return content;
+    }
+
+    public void reg(Observer observer){
+        this.observer = observer;
+    }
+
+    public void upd(String message){
+        observer.update(message);
     }
 
     /**

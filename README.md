@@ -8,9 +8,10 @@ Drag the file to app, then this app will try to recognize and automatically exec
  
 ## Support type
 Currently, this app able to recognize the ".icns", ".iconset" and ".app".<br>
-Will add svg file support in the future.
+Now support svg file.
 ### Action
 ".icns" - extract -> an ".iconset" folder.<br>
 ".iconset" - package -> an ".icns" file.<br>
 ".app" - extract -> an ".iconset" folder.<br>
+".svg" - extract -> an ".iconset" folder and an ".icns" file.
 

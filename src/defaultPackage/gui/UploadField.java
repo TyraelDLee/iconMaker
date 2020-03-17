@@ -149,6 +149,25 @@ public class UploadField extends StackPane {
 //        rt.play();
     }
 
+    /* instruction of active listener.
+    * uploadField.setOnDragOver(event -> {
+            if (event.getGestureSource() != uploadField) {
+                event.acceptTransferModes(TransferMode.ANY);
+                ...
+                do action here.
+            }
+        });
+        uploadField.setOnDragDropped(event -> {
+            Dragboard db = event.getDragboard();
+            // essential object.
+
+            address = db.getFiles().get(0).toString();
+            // get file/input address
+
+            ...
+            do action here.
+        });
+        * */
     void setExit(boolean exit){
         this.exit = exit;
     }
