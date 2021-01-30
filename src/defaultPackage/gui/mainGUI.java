@@ -12,8 +12,10 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class mainGUI extends Application implements Observer {
     private static final double WINDOW_HEIGHT = 720;
@@ -48,6 +50,10 @@ public class mainGUI extends Application implements Observer {
         primaryStage.setMinHeight(720*0.7);
         primaryStage.setMinWidth(420*0.7);
         Scene scene = new Scene(root,WINDOW_WIDTH,WINDOW_HEIGHT);
+        scene.setFill(Color.WHITESMOKE.deriveColor(
+                0, 1, 1, 0.5
+        ));
+
         scene.heightProperty().addListener((observable, oldValue, newValue) -> {
             mainStageHeight = newValue;
             setZoomFactor(mainStageWidth, mainStageHeight);
@@ -81,6 +87,7 @@ public class mainGUI extends Application implements Observer {
 
         //mn.setLayoutX(WINDOW_WIDTH);mn.setLayoutY(WINDOW_HEIGHT);
         root.getChildren().addAll(extractButton,packageButton, uploadField, labelArea);
+        primaryStage.initStyle(StageStyle.DECORATED);
         primaryStage.setScene(scene);
         primaryStage.show();
     }

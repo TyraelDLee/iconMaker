@@ -198,21 +198,23 @@ public class Execution {
             e.printStackTrace();
         }
         System.out.println(iconName);
+        iconName = removeFrontSpace(iconName);
         iconSrc += iconName;
         //execute//
         if(iconSrc.contains(".icns")){
-            execute(iconSrc,false);
+//            execute(iconSrc,false);
             String repo = address.replace(fileName(address),"");
             Process executor;
             try {
-                executor = Runtime.getRuntime().exec("cp -r "+iconSrc.replace(".icns",".iconset")+" "+repo);
+                System.out.println(iconSrc);
+                executor = Runtime.getRuntime().exec("cp -r "+iconSrc.replace("\t","")+" "+repo);
                 String line;
                 BufferedReader br = new BufferedReader(new InputStreamReader(executor.getInputStream()));
                 while ((line = br.readLine()) != null)
                     System.out.println(line);
                 executor.destroy();
                 br.close();
-                executor = Runtime.getRuntime().exec("rm -r -f "+iconSrc.replace(".icns",".iconset"));
+//                executor = Runtime.getRuntime().exec("rm -r -f "+iconSrc.replace(".icns",".iconset"));
                 br = new BufferedReader(new InputStreamReader(executor.getInputStream()));
                 while ((line = br.readLine()) != null)
                     System.out.println(line);
@@ -264,6 +266,13 @@ public class Execution {
 
     }
 
+    private String removeFrontSpace(String name){
+        if(!(name.charAt(0)+"").equals(" "))
+            return name;
+        name = (String)name.subSequence(1,name.length());
+        return removeFrontSpace(name);
+    }
+
     private String encode(String src){
         String content = "";
         try {
@@ -290,7 +299,7 @@ public class Execution {
     public static void main(String[] args) {
         Execution execution = new Execution();
         //execution.executeApp("/Users/tyraellee/Desktop/i4Tools.app");
-        execution.executeSVG("/Users/tyraellee/Desktop/test.svg");
+//        execution.executeSVG("/Users/tyraellee/Desktop/test.svg");
     }
 }
 //todo: recognize vector image and package to .icns file
